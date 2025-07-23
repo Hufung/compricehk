@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>香港超市價格比較</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles and theme definition */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5; /* iOS-like light gray background */
+        }
+        
+        /* Custom styles for an iOS-like feel */
+        .ios-select, .ios-button {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 10px; /* More rounded corners */
+            padding: 14px 16px;
+            font-size: 16px;
+            width: 100%;
+            cursor: pointer;
+            color: #111827;
+        }
+
+        .ios-select {
+            /* Custom chevron icon for select dropdowns */
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m5%206%205%208%205-8%22%20stroke%3D%22%236b7280%22%20stroke-width%3D%222%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+        
+        /* Style for the main action button */
+        .ios-button {
+            background-color: #3b82f6; /* The requested light blue */
+            color: white;
+            font-weight: 600;
+            border: none;
+            transition: background-color 0.2s ease-in-out;
+        }
+        
+        .ios-button:hover, .ios-button:focus {
+            background-color: #2563eb; /* A slightly darker blue for interaction */
+            outline: none;
+        }
+        
+        /* Style for secondary/utility buttons */
+        .utility-button {
+             background-color: #e5e7eb;
+             color: #374151;
+             font-weight: 500;
+             border: 1px solid #d1d5db;
+             transition: background-color 0.2s;
+        }
+        .utility-button:hover {
+            background-color: #d1d5db;
+        }
+
+        .ios-label {
+            color: #4b5563;
+            font-weight: 500;
+            margin-bottom: 6px;
+            display: block;
+            font-size: 14px;
+        }
+
+        /* Loading spinner animation */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <main id="app" class="w-full max-w-md mx-auto bg-white rounded-2xl shadow-lg p-6 md:p-8 space-y-6">
+        
+        <!-- Loading Indicator -->
+        <div id="loader" class="text-center py-8">
+            <div class="spinner h-12 w-12 rounded-full border-4 border-t-blue-500 border-gray-200 mx-auto"></div>
+            <p id="loader-text" class="mt-4 text-gray-500">正在載入數據...</p>
+        </div>
+
+        <!-- Main Content (hidden until data is loaded) -->
+        <div id="main-content" class="hidden">
+            <header class="text-center mb-6">
+                <h1 id="app-title" class="text-2xl font-bold text-gray-800">香港超市價格比較</h1>
+                <p id="app-subtitle" class="text-gray-500 mt-1">HK Supermarket Price Watch</p>
+            </header>
+
+            <!-- Control Buttons -->
+            <section class="flex gap-2 mb-4">
+                <button id="lang-toggle-btn" class="utility-button w-full py-2 rounded-lg">English</button>
+                <button id="update-data-btn" class="utility-button w-full py-2 rounded-lg">更新數據</button>
+            </section>
+
+            <!-- Dropdown selectors and button -->
+            <section class="space-y-5">
+                <div>
+                    <label for="spinner1" id="label-cat1" class="ios-label">貨品分類 1</label>
+                    <select id="spinner1" class="ios-select"></select>
+                </div>
+                <div>
+                    <label for="spinner2" id="label-cat2" class="ios-label">貨品分類 2</label>
+                    <select id="spinner2" class="ios-select"></select>
+                </div>
+                <div>
+                    <label for="spinner3" id="label-cat3" class="ios-label">貨品分類 3</label>
+                    <select id="spinner3" class="ios-select"></select>
+                </div>
+                <div>
+                    <label for="spinner4" id="label-product" class="ios-label">貨品名稱</label>
+                    <select id="spinner4" class="ios-select"></select>
+                </div>
+                <button id="show-price-btn" class="ios-button w-full !mt-6 py-3">顯示價格</button>
+            </section>
+
+            <!-- Results Display Area -->
+            <section id="results-container" class="mt-6">
+                 <h2 id="results-title" class="font-semibold text-lg text-gray-700 mb-2">價格詳情</h2>
+                 <div id="results" class="p-4 bg-blue-50 border border-blue-200 rounded-lg min-h-[120px] text-gray-800 whitespace-pre-wrap text-sm leading-relaxed">
+                    請選擇商品以查看價格。
+                 </div>
+            </section>
+        </div>
+        
+        <!-- Error Message Display -->
+        <div id="error-message" class="hidden text-center text-red-600 bg-red-100 p-4 rounded-lg"></div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Element References ---
+            const loader = document.getElementById('loader');
+            const mainContent = document.getElementById('main-content');
+            const errorMessage = document.getElementById('error-message');
+            
+            const spinner1 = document.getElementById('spinner1');
+            const spinner2 = document.getElementById('spinner2');
+            const spinner3 = document.getElementById('spinner3');
+            const spinner4 = document.getElementById('spinner4');
+            const showPriceBtn = document.getElementById('show-price-btn');
+            const resultsDiv = document.getElementById('results');
+            const langToggleBtn = document.getElementById('lang-toggle-btn');
+            const updateDataBtn = document.getElementById('update-data-btn');
+
+            // --- Data Structures ---
+            let f1 = []; let f2 = {}; let f3 = {}; let f4 = {}; let f5 = {};
+
+            // --- State ---
+            let currentLanguage = 'zh';
+
+            // --- Translation Dictionaries ---
+            const supermarketNames = {
+                'AEON': { zh: '永旺', en: 'AEON' },
+                'PNS': { zh: '百佳', en: 'PARKnSHOP' },
+                'WTM': { zh: '惠康', en: 'Wellcome' },
+            };
+
+            const translations = {
+                zh: {
+                    title: '香港超市價格比較',
+                    subtitle: 'HK Supermarket Price Watch',
+                    toggleLang: 'English',
+                    updateData: '更新數據',
+                    loading: '正在載入數據...',
+                    updating: '正在更新數據...',
+                    cat1: '貨品分類 1',
+                    cat2: '貨品分類 2',
+                    cat3: '貨品分類 3',
+                    product: '貨品名稱',
+                    showPrice: '顯示價格',
+                    resultsTitle: '價格詳情',
+                    initialResult: '請選擇商品以查看價格。',
+                    selectCat1: '選擇分類 1',
+                    selectCat2: '選擇分類 2',
+                    selectCat3: '選擇分類 3',
+                    selectProduct: '選擇貨品',
+                    noPriceInfo: '暫無此商品的價格信息。',
+                    selectProductFirst: '請先從上方列表選擇一個完整的商品名稱。',
+                    dataError: '無法載入數據。請稍後再試。',
+                    productLabel: '商品',
+                    brandLabel: '品牌',
+                    priceLabel: '價格',
+                    offerLabel: '優惠',
+                    noOffer: '無',
+                    supermarketLabel: '超市'
+                },
+                en: {
+                    title: 'HK Supermarket Price Comparison',
+                    subtitle: '香港超市價格比較',
+                    toggleLang: '中文',
+                    updateData: 'Update Data',
+                    loading: 'Loading data...',
+                    updating: 'Updating data...',
+                    cat1: 'Category 1',
+                    cat2: 'Category 2',
+                    cat3: 'Category 3',
+                    product: 'Product Name',
+                    showPrice: 'Show Price',
+                    resultsTitle: 'Price Details',
+                    initialResult: 'Please select a product to see prices.',
+                    selectCat1: 'Select Category 1',
+                    selectCat2: 'Select Category 2',
+                    selectCat3: 'Select Category 3',
+                    selectProduct: 'Select Product',
+                    noPriceInfo: 'No price information available for this product.',
+                    selectProductFirst: 'Please select a complete product name from the list above.',
+                    dataError: 'Could not load data. Please try again later.',
+                    productLabel: 'Product',
+                    brandLabel: 'Brand',
+                    priceLabel: 'Price',
+                    offerLabel: 'Offer',
+                    noOffer: 'None',
+                    supermarketLabel: 'Supermarket'
+                }
+            };
+            
+            /**
+             * Sets the language for the entire UI.
+             * @param {string} lang - The language to set ('en' or 'zh').
+             */
+            function setLanguage(lang) {
+                currentLanguage = lang;
+                document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
+                const t = translations[lang];
+
+                // Update all text elements
+                document.title = t.title;
+                document.getElementById('app-title').textContent = t.title;
+                document.getElementById('app-subtitle').textContent = t.subtitle;
+                document.getElementById('lang-toggle-btn').textContent = t.toggleLang;
+                document.getElementById('update-data-btn').textContent = t.updateData;
+                document.getElementById('label-cat1').textContent = t.cat1;
+                document.getElementById('label-cat2').textContent = t.cat2;
+                document.getElementById('label-cat3').textContent = t.cat3;
+                document.getElementById('label-product').textContent = t.product;
+                document.getElementById('show-price-btn').textContent = t.showPrice;
+                document.getElementById('results-title').textContent = t.resultsTitle;
+                
+                // Re-populate spinners with correct placeholder text
+                populateSpinner(spinner1, f1, t.selectCat1);
+                resetSpinner(spinner2, t.selectCat2);
+                resetSpinner(spinner3, t.selectCat3);
+                resetSpinner(spinner4, t.selectProduct);
+                
+                // Update results text if it's in its initial state
+                if(resultsDiv.textContent === translations.zh.initialResult || resultsDiv.textContent === translations.en.initialResult) {
+                    resultsDiv.textContent = t.initialResult;
+                } else {
+                    // If a product is selected, re-render the price to apply new language
+                    showPrice();
+                }
+            }
+
+            /**
+             * Fetches, parses, and processes the price watch data.
+             */
+            async function loadData(isUpdate = false) {
+                const t = translations[currentLanguage];
+                loader.classList.remove('hidden');
+                mainContent.classList.add('hidden');
+                document.getElementById('loader-text').textContent = isUpdate ? t.updating : t.loading;
+
+                const dataUrl = "https://online-price-watch.consumer.org.hk/opw/opendata/pricewatch_zh-Hant.csv";
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(dataUrl)}`;
+
+                try {
+                    const response = await fetch(proxyUrl);
+                    if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
+                    
+                    const csvText = await response.text();
+                    const parsedData = parseCSV(csvText);
+                    processData(parsedData);
+                    
+                    setLanguage(currentLanguage); // Re-apply language to populate spinners correctly
+
+                    loader.classList.add('hidden');
+                    mainContent.classList.remove('hidden');
+                    errorMessage.classList.add('hidden');
+
+                } catch (error) {
+                    console.error("Failed to load or process data:", error);
+                    loader.classList.add('hidden');
+                    errorMessage.textContent = `${t.dataError}\nError: ${error.message}`;
+                    errorMessage.classList.remove('hidden');
+                }
+            }
+
+            function parseCSV(text) {
+                const lines = text.trim().split('\n');
+                const headers = lines[0].split(',').map(h => h.trim());
+                const data = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const values = lines[i].split(',');
+                    if (values.length !== headers.length) continue;
+                    const entry = {};
+                    for (let j = 0; j < headers.length; j++) {
+                        entry[headers[j]] = values[j].trim();
+                    }
+                    data.push(entry);
+                }
+                return data;
+            }
+            
+            function processData(data) {
+                f1 = []; f2 = {}; f3 = {}; f4 = {}; f5 = {}; // Reset data structures
+                data.forEach(item => {
+                    const cat1 = item['貨品分類1'], cat2 = item['貨品分類2'], cat3 = item['貨品分類3'], name = item['貨品名稱'];
+                    const supermarket = item['超市代號'], price = item['價格'], offer = item['優惠'], brand = item['品牌'];
+
+                    if (!cat1 || !cat2 || !cat3 || !name) return;
+
+                    if (!f1.includes(cat1)) { f1.push(cat1); f2[cat1] = []; }
+                    if (!f2[cat1].includes(cat2)) { f2[cat1].push(cat2); f3[cat2] = []; }
+                    if (!f3[cat2].includes(cat3)) { f3[cat2].push(cat3); f4[cat3] = []; }
+                    if (!f4[cat3].includes(name)) { f4[cat3].push(name); f5[`${name}_price`] = {}; f5[`${name}_brand`] = brand; }
+                    
+                    const t = translations[currentLanguage];
+                    const priceText = `${t.priceLabel}: $${price}, ${t.offerLabel}: ${offer || t.noOffer}`;
+                    if (!f5[`${name}_price`][supermarket]) {
+                        f5[`${name}_price`][supermarket] = priceText;
+                    }
+                });
+            }
+
+            function populateSpinner(spinner, values, defaultText) {
+                spinner.innerHTML = `<option value="">-- ${defaultText} --</option>`;
+                values.forEach(value => {
+                    const option = document.createElement('option');
+                    option.value = value;
+                    option.textContent = value;
+                    spinner.appendChild(option);
+                });
+                spinner.disabled = values.length === 0;
+            }
+
+            function resetSpinner(spinner, defaultText) {
+                spinner.innerHTML = `<option value="">-- ${defaultText} --</option>`;
+                spinner.disabled = true;
+            }
+
+            function updateSpinner2() {
+                const selectedCat1 = spinner1.value;
+                const t = translations[currentLanguage];
+                if (selectedCat1 && f2[selectedCat1]) {
+                    populateSpinner(spinner2, f2[selectedCat1], t.selectCat2);
+                } else {
+                    resetSpinner(spinner2, t.selectCat2);
+                }
+                resetSpinner(spinner3, t.selectCat3);
+                resetSpinner(spinner4, t.selectProduct);
+                resultsDiv.textContent = t.initialResult;
+            }
+
+            function updateSpinner3() {
+                const selectedCat2 = spinner2.value;
+                const t = translations[currentLanguage];
+                if (selectedCat2 && f3[selectedCat2]) {
+                    populateSpinner(spinner3, f3[selectedCat2], t.selectCat3);
+                } else {
+                    resetSpinner(spinner3, t.selectCat3);
+                }
+                resetSpinner(spinner4, t.selectProduct);
+                resultsDiv.textContent = t.initialResult;
+            }
+            
+            function updateSpinner4() {
+                const selectedCat3 = spinner3.value;
+                const t = translations[currentLanguage];
+                if (selectedCat3 && f4[selectedCat3]) {
+                    populateSpinner(spinner4, f4[selectedCat3], t.selectProduct);
+                } else {
+                    resetSpinner(spinner4, t.selectProduct);
+                }
+                 resultsDiv.textContent = t.initialResult;
+            }
+
+            function showPrice() {
+                const selectedProduct = spinner4.value;
+                const t = translations[currentLanguage];
+                if (selectedProduct) {
+                    const priceInfo = f5[`${selectedProduct}_price`] || {};
+                    const brand = f5[`${selectedProduct}_brand`] || "未知品牌";
+                    
+                    let output = `${t.productLabel}: ${selectedProduct}\n`;
+                    output += `${t.brandLabel}: ${brand}\n\n`;
+                    
+                    const supermarkets = Object.keys(priceInfo);
+                    if (supermarkets.length > 0) {
+                       supermarkets.forEach(code => {
+                           const storeName = (supermarketNames[code] && supermarketNames[code][currentLanguage]) || code;
+                           const priceText = `${t.priceLabel}: $${f5[`${selectedProduct}_price`][code].split('$')[1].split(',')[0]}, ${t.offerLabel}: ${f5[`${selectedProduct}_price`][code].split(': ')[2] || t.noOffer}`;
+                           output += `${t.supermarketLabel} ${storeName}: ${priceText}\n`;
+                       });
+                    } else {
+                        output += t.noPriceInfo;
+                    }
+                    resultsDiv.textContent = output;
+                } else {
+                    resultsDiv.textContent = t.selectProductFirst;
+                }
+            }
+
+            // --- Event Listeners ---
+            spinner1.addEventListener('change', updateSpinner2);
+            spinner2.addEventListener('change', updateSpinner3);
+            spinner3.addEventListener('change', updateSpinner4);
+            showPriceBtn.addEventListener('click', showPrice);
+            langToggleBtn.addEventListener('click', () => {
+                setLanguage(currentLanguage === 'en' ? 'zh' : 'en');
+            });
+            updateDataBtn.addEventListener('click', () => loadData(true));
+
+            // --- Initial Load ---
+            loadData();
+        });
+    </script>
+</body>
+</html>
