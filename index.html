@@ -3,28 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>香港超市價格比較</title>
-    <!-- Tailwind CSS for styling -->
+    <title>ComPriceHK</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Base styles and theme definition */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5; /* iOS-like light gray background */
+            background-color: #f0f2f5;
         }
-        
-        /* Custom styles for an iOS-like feel */
         .ios-select, .ios-button {
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
             background-color: #ffffff;
             border: 1px solid #d1d5db;
-            border-radius: 10px; /* More rounded corners */
+            border-radius: 10px;
             padding: 14px 16px;
             font-size: 16px;
             width: 100%;
@@ -33,16 +28,14 @@
         }
 
         .ios-select {
-            /* Custom chevron icon for select dropdowns */
             background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m5%206%205%208%205-8%22%20stroke%3D%22%236b7280%22%20stroke-width%3D%222%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E');
             background-repeat: no-repeat;
             background-position: right 1rem center;
             background-size: 1em;
         }
-        
-        /* Style for the main action button */
+
         .ios-button {
-            background-color: #3b82f6; /* The requested light blue */
+            background-color: #3b82f6;
             color: white;
             font-weight: 600;
             border: none;
@@ -50,11 +43,10 @@
         }
         
         .ios-button:hover, .ios-button:focus {
-            background-color: #2563eb; /* A slightly darker blue for interaction */
+            background-color: #2563eb; 
             outline: none;
         }
-        
-        /* Style for secondary/utility buttons */
+
         .utility-button {
              background-color: #e5e7eb;
              color: #374151;
@@ -74,7 +66,6 @@
             font-size: 14px;
         }
 
-        /* Loading spinner animation */
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
@@ -86,27 +77,19 @@
 <body class="flex items-center justify-center min-h-screen p-4">
 
     <main id="app" class="w-full max-w-md mx-auto bg-white rounded-2xl shadow-lg p-6 md:p-8 space-y-6">
-        
-        <!-- Loading Indicator -->
         <div id="loader" class="text-center py-8">
             <div class="spinner h-12 w-12 rounded-full border-4 border-t-blue-500 border-gray-200 mx-auto"></div>
             <p id="loader-text" class="mt-4 text-gray-500">正在載入數據...</p>
         </div>
-
-        <!-- Main Content (hidden until data is loaded) -->
         <div id="main-content" class="hidden">
             <header class="text-center mb-6">
                 <h1 id="app-title" class="text-2xl font-bold text-gray-800">香港超市價格比較</h1>
                 <p id="app-subtitle" class="text-gray-500 mt-1">HK Supermarket Price Watch</p>
             </header>
-
-            <!-- Control Buttons -->
             <section class="flex gap-2 mb-4">
                 <button id="lang-toggle-btn" class="utility-button w-full py-2 rounded-lg">English</button>
                 <button id="update-data-btn" class="utility-button w-full py-2 rounded-lg">更新數據</button>
             </section>
-
-            <!-- Dropdown selectors and button -->
             <section class="space-y-5">
                 <div>
                     <label for="spinner1" id="label-cat1" class="ios-label">貨品分類 1</label>
@@ -133,16 +116,14 @@
                  <div id="results" class="p-4 bg-blue-50 border border-blue-200 rounded-lg min-h-[120px] text-gray-800 whitespace-pre-wrap text-sm leading-relaxed">
                     請選擇商品以查看價格。
                  </div>
+                <p>All the data is form Hong Kong Consumer Council</p>
             </section>
         </div>
-        
-        <!-- Error Message Display -->
         <div id="error-message" class="hidden text-center text-red-600 bg-red-100 p-4 rounded-lg"></div>
     </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- DOM Element References ---
             const loader = document.getElementById('loader');
             const mainContent = document.getElementById('main-content');
             const errorMessage = document.getElementById('error-message');
@@ -155,14 +136,8 @@
             const resultsDiv = document.getElementById('results');
             const langToggleBtn = document.getElementById('lang-toggle-btn');
             const updateDataBtn = document.getElementById('update-data-btn');
-
-            // --- Data Structures ---
             let f1 = []; let f2 = {}; let f3 = {}; let f4 = {}; let f5 = {};
-
-            // --- State ---
             let currentLanguage = 'zh';
-
-            // --- Translation Dictionaries ---
             const supermarketNames = {
                 'AEON': { zh: '永旺', en: 'AEON' },
                 'PNS': { zh: '百佳', en: 'PARKnSHOP' },
@@ -227,17 +202,10 @@
                     supermarketLabel: 'Supermarket'
                 }
             };
-            
-            /**
-             * Sets the language for the entire UI.
-             * @param {string} lang - The language to set ('en' or 'zh').
-             */
             function setLanguage(lang) {
                 currentLanguage = lang;
                 document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
                 const t = translations[lang];
-
-                // Update all text elements
                 document.title = t.title;
                 document.getElementById('app-title').textContent = t.title;
                 document.getElementById('app-subtitle').textContent = t.subtitle;
@@ -249,25 +217,16 @@
                 document.getElementById('label-product').textContent = t.product;
                 document.getElementById('show-price-btn').textContent = t.showPrice;
                 document.getElementById('results-title').textContent = t.resultsTitle;
-                
-                // Re-populate spinners with correct placeholder text
                 populateSpinner(spinner1, f1, t.selectCat1);
                 resetSpinner(spinner2, t.selectCat2);
                 resetSpinner(spinner3, t.selectCat3);
                 resetSpinner(spinner4, t.selectProduct);
-                
-                // Update results text if it's in its initial state
                 if(resultsDiv.textContent === translations.zh.initialResult || resultsDiv.textContent === translations.en.initialResult) {
                     resultsDiv.textContent = t.initialResult;
                 } else {
-                    // If a product is selected, re-render the price to apply new language
                     showPrice();
                 }
             }
-
-            /**
-             * Fetches, parses, and processes the price watch data.
-             */
             async function loadData(isUpdate = false) {
                 const t = translations[currentLanguage];
                 loader.classList.remove('hidden');
@@ -285,7 +244,7 @@
                     const parsedData = parseCSV(csvText);
                     processData(parsedData);
                     
-                    setLanguage(currentLanguage); // Re-apply language to populate spinners correctly
+                    setLanguage(currentLanguage);
 
                     loader.classList.add('hidden');
                     mainContent.classList.remove('hidden');
@@ -316,7 +275,7 @@
             }
             
             function processData(data) {
-                f1 = []; f2 = {}; f3 = {}; f4 = {}; f5 = {}; // Reset data structures
+                f1 = []; f2 = {}; f3 = {}; f4 = {}; f5 = {};
                 data.forEach(item => {
                     const cat1 = item['貨品分類1'], cat2 = item['貨品分類2'], cat3 = item['貨品分類3'], name = item['貨品名稱'];
                     const supermarket = item['超市代號'], price = item['價格'], offer = item['優惠'], brand = item['品牌'];
@@ -414,7 +373,6 @@
                 }
             }
 
-            // --- Event Listeners ---
             spinner1.addEventListener('change', updateSpinner2);
             spinner2.addEventListener('change', updateSpinner3);
             spinner3.addEventListener('change', updateSpinner4);
@@ -424,7 +382,6 @@
             });
             updateDataBtn.addEventListener('click', () => loadData(true));
 
-            // --- Initial Load ---
             loadData();
         });
     </script>
