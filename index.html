@@ -3,62 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ComPriceHK</title>
+    <title>香港超市價格比較</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f0f2f5; }
-        .ios-select, .ios-button { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-color: #ffffff; border: 1px solid #d1d5db; border-radius: 10px; padding: 14px 16px; font-size: 16px; width: 100%; cursor: pointer; color: #111827; }
-        .ios-select { background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m5%206%205%208%205-8%22%20stroke%3D%22%236b7280%22%20stroke-width%3D%222%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
-        .ios-button { background-color: #3b82f6; color: white; font-weight: 600; border: none; transition: background-color 0.2s ease-in-out; }
-        .ios-button:hover, .ios-button:focus { background-color: #2563eb; outline: none; }
-        .utility-button { background-color: #e5e7eb; color: #374151; font-weight: 500; border: 1px solid #d1d5db; transition: background-color 0.2s; }
-        .utility-button:hover { background-color: #d1d5db; }
-        .ios-label { color: #4b5563; font-weight: 500; margin-bottom: 6px; display: block; font-size: 14px; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #a8d8ff 0%, #bde0fe 50%, #e0f7fa 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        /* --- Glassmorphism Card --- */
+        #app {
+            background: rgba(255, 255, 255, 0.6);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 24px;
+            border: 1px solid rgba(209, 213, 219, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        }
+
+        /* --- Glassmorphism Inputs & Buttons --- */
+        .glass-input, .glass-button {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.5);
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            padding: 14px 16px;
+            font-size: 16px;
+            width: 100%;
+            cursor: pointer;
+            color: #1f2937;
+            transition: background 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .glass-input:hover, .glass-button:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+        
+        .glass-input {
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m5%206%205%208%205-8%22%20stroke%3D%22%23374151%22%20stroke-width%3D%222%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+        
+        /* --- Primary Action Button --- */
+        .primary-button {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: 600;
+            border: none;
+        }
+        .primary-button:hover {
+            background-color: #2563eb;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+
+        .ios-label {
+            color: #374151;
+            font-weight: 500;
+            margin-bottom: 6px;
+            display: block;
+            font-size: 14px;
+            padding-left: 4px;
+        }
+        
+        /* --- Results Area --- */
+        #results {
+            background: rgba(59, 130, 246, 0.1);
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            border-radius: 14px;
+            min-height: 120px;
+            color: #1e3a8a;
+            font-weight: 500;
+        }
+
         @keyframes spin { to { transform: rotate(360deg); } }
         .spinner { animation: spin 1s linear infinite; }
-        #app{backgound-color:#DEE9ED;}
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
-    <main id="app" class="w-full max-w-md mx-auto bg-white rounded-2xl shadow-lg p-6 md:p-8 space-y-6">
+<body>
+    <main id="app" class="w-full max-w-md mx-auto p-6 md:p-8 space-y-6">
         <div id="loader" class="text-center py-8">
             <div class="spinner h-12 w-12 rounded-full border-4 border-t-blue-500 border-gray-200 mx-auto"></div>
-            <p id="loader-text" class="mt-4 text-gray-500">正在載入數據...</p>
+            <p id="loader-text" class="mt-4 text-gray-600">正在載入數據...</p>
         </div>
         <div id="main-content" class="hidden">
             <header class="text-center mb-6">
-                <h1 id="app-title" class="text-2xl font-bold text-gray-800">香港超市價格比較</h1>
+                <h1 id="app-title" class="text-3xl font-bold text-gray-800">香港超市價格比較</h1>
                 <p id="app-subtitle" class="text-gray-500 mt-1">HK Supermarket Price Watch</p>
             </header>
             <section class="flex gap-2 mb-4">
-                <button id="lang-toggle-btn" class="utility-button w-full py-2 rounded-lg">English</button>
-                <button id="update-data-btn" class="utility-button w-full py-2 rounded-lg">更新數據</button>
+                <button id="lang-toggle-btn" class="glass-button text-sm">English</button>
+                <button id="update-data-btn" class="glass-button text-sm">更新數據</button>
             </section>
             <section class="space-y-5">
                 <div>
                     <label for="spinner1" id="label-cat1" class="ios-label">貨品分類 1</label>
-                    <select id="spinner1" class="ios-select"></select>
+                    <select id="spinner1" class="glass-input"></select>
                 </div>
                 <div>
                     <label for="spinner2" id="label-cat2" class="ios-label">貨品分類 2</label>
-                    <select id="spinner2" class="ios-select"></select>
+                    <select id="spinner2" class="glass-input"></select>
                 </div>
                 <div>
                     <label for="spinner3" id="label-cat3" class="ios-label">貨品分類 3</label>
-                    <select id="spinner3" class="ios-select"></select>
+                    <select id="spinner3" class="glass-input"></select>
                 </div>
                 <div>
                     <label for="spinner4" id="label-product" class="ios-label">貨品名稱</label>
-                    <select id="spinner4" class="ios-select"></select>
+                    <select id="spinner4" class="glass-input"></select>
                 </div>
-                <button id="show-price-btn" class="ios-button w-full !mt-6 py-3">顯示價格</button>
+                <button id="show-price-btn" class="glass-button primary-button w-full !mt-6 py-3">顯示價格</button>
             </section>
             <section id="results-container" class="mt-6">
-                 <h2 id="results-title" class="font-semibold text-lg text-gray-700 mb-2">價格詳情</h2>
-                 <div id="results" class="p-4 bg-blue-50 border border-blue-200 rounded-lg min-h-[120px] text-gray-800 whitespace-pre-wrap text-sm leading-relaxed">
+                 <h2 id="results-title" class="font-semibold text-lg text-gray-700 mb-2 px-1">價格詳情</h2>
+                 <div id="results" class="p-4 whitespace-pre-wrap text-sm leading-relaxed">
                     請選擇商品以查看價格。
                  </div>
             </section>
@@ -84,12 +157,9 @@
             let currentLanguage = 'zh';
 
             const supermarketNames = {
-                'AEON': { zh: 'AEON', en: 'AEON' },
-                'PARKNSHOP': { zh: '百佳', en: 'PARKNSHOP' },
-                'WELLCOME': { zh: '惠康', en: 'WELLCOME' },
-                'MANNINGS':{zh:'萬寧',en:'MANNINGS'},
-                'WATSONS':{zh:'屈臣氏',en:'WATSONS'},
-                'JASONS':{zh:'MARKET PLACE',en: 'MARKET PLACE'}
+                'AEON': { zh: '永旺', en: 'AEON' },
+                'PNS': { zh: '百佳', en: 'PARKnSHOP' },
+                'WTM': { zh: '惠康', en: 'Wellcome' },
             };
 
             const translations = {
@@ -115,7 +185,7 @@
                 document.getElementById('show-price-btn').textContent = t.showPrice;
                 document.getElementById('results-title').textContent = t.resultsTitle;
 
-                populateSpinner(spinner1, Array.from(dataStore.cat1).sort(), t.selectCat1);
+                populateSpinner(spinner1, Object.keys(dataStore).sort(), t.selectCat1);
                 resetSpinner(spinner2, t.selectCat2);
                 resetSpinner(spinner3, t.selectCat3);
                 resetSpinner(spinner4, t.selectProduct);
@@ -124,6 +194,19 @@
                     resultsDiv.textContent = t.initialResult;
                 } else {
                     showPrice();
+                }
+            }
+            
+            async function fetchWithRetry(url, retries = 3, delay = 1000) {
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const response = await fetch(url);
+                        if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
+                        return response;
+                    } catch (error) {
+                        if (i === retries - 1) throw error;
+                        await new Promise(res => setTimeout(res, delay));
+                    }
                 }
             }
 
@@ -137,9 +220,7 @@
                 const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(dataUrl)}`;
 
                 try {
-                    const response = await fetch(proxyUrl);
-                    if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
-                    
+                    const response = await fetchWithRetry(proxyUrl);
                     const csvText = await response.text();
                     processData(parseCSV(csvText));
                     setLanguage(currentLanguage);
@@ -171,26 +252,17 @@
             }
             
             function processData(data) {
-                dataStore = { cat1: new Set(), cat2: {}, cat3: {}, products: {}, productDetails: {} };
+                dataStore = {};
                 data.forEach(item => {
                     const c1 = item['貨品分類1'], c2 = item['貨品分類2'], c3 = item['貨品分類3'], name = item['貨品名稱'];
                     if (!c1 || !c2 || !c3 || !name) return;
 
-                    const keyC2 = `${c1}`;
-                    const keyC3 = `${c1}|${c2}`;
-                    const keyProd = `${c1}|${c2}|${c3}`;
+                    if (!dataStore[c1]) dataStore[c1] = {};
+                    if (!dataStore[c1][c2]) dataStore[c1][c2] = {};
+                    if (!dataStore[c1][c2][c3]) dataStore[c1][c2][c3] = new Set();
+                    dataStore[c1][c2][c3].add(name);
 
-                    dataStore.cat1.add(c1);
-                    
-                    if (!dataStore.cat2[keyC2]) dataStore.cat2[keyC2] = new Set();
-                    dataStore.cat2[keyC2].add(c2);
-
-                    if (!dataStore.cat3[keyC3]) dataStore.cat3[keyC3] = new Set();
-                    dataStore.cat3[keyC3].add(c3);
-
-                    if (!dataStore.products[keyProd]) dataStore.products[keyProd] = new Set();
-                    dataStore.products[keyProd].add(name);
-
+                    if (!dataStore.productDetails) dataStore.productDetails = {};
                     if (!dataStore.productDetails[name]) {
                         dataStore.productDetails[name] = { brand: item['品牌'], prices: {} };
                     }
@@ -247,7 +319,7 @@
             spinner1.addEventListener('change', () => {
                 const t = translations[currentLanguage];
                 const c1 = spinner1.value;
-                const values = c1 && dataStore.cat2[c1] ? Array.from(dataStore.cat2[c1]).sort() : [];
+                const values = c1 ? Object.keys(dataStore[c1]).sort() : [];
                 populateSpinner(spinner2, values, t.selectCat2);
                 resetSpinner(spinner3, t.selectCat3);
                 resetSpinner(spinner4, t.selectProduct);
@@ -258,8 +330,7 @@
                 const t = translations[currentLanguage];
                 const c1 = spinner1.value;
                 const c2 = spinner2.value;
-                const key = `${c1}|${c2}`;
-                const values = c1 && c2 && dataStore.cat3[key] ? Array.from(dataStore.cat3[key]).sort() : [];
+                const values = c1 && c2 ? Object.keys(dataStore[c1][c2]).sort() : [];
                 populateSpinner(spinner3, values, t.selectCat3);
                 resetSpinner(spinner4, t.selectProduct);
                 resultsDiv.textContent = t.initialResult;
@@ -270,8 +341,7 @@
                 const c1 = spinner1.value;
                 const c2 = spinner2.value;
                 const c3 = spinner3.value;
-                const key = `${c1}|${c2}|${c3}`;
-                const values = c1 && c2 && c3 && dataStore.products[key] ? Array.from(dataStore.products[key]).sort() : [];
+                const values = c1 && c2 && c3 ? Array.from(dataStore[c1][c2][c3]).sort() : [];
                 populateSpinner(spinner4, values, t.selectProduct);
                 resultsDiv.textContent = t.initialResult;
             });
