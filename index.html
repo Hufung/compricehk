@@ -217,7 +217,7 @@
                 document.getElementById('loader-text').textContent = isUpdate ? t.updating : t.loading;
 
                 const dataUrl = "https://online-price-watch.consumer.org.hk/opw/opendata/pricewatch_zh-Hant.csv";
-                const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(dataUrl)}`;
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(dataUrl)}`;
 
                 try {
                     const response = await fetchWithRetry(proxyUrl);
