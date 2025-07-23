@@ -9,73 +9,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5;
-        }
-        .ios-select, .ios-button {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            background-color: #ffffff;
-            border: 1px solid #d1d5db;
-            border-radius: 10px;
-            padding: 14px 16px;
-            font-size: 16px;
-            width: 100%;
-            cursor: pointer;
-            color: #111827;
-        }
-
-        .ios-select {
-            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m5%206%205%208%205-8%22%20stroke%3D%22%236b7280%22%20stroke-width%3D%222%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E');
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1em;
-        }
-
-        .ios-button {
-            background-color: #3b82f6;
-            color: white;
-            font-weight: 600;
-            border: none;
-            transition: background-color 0.2s ease-in-out;
-        }
-        
-        .ios-button:hover, .ios-button:focus {
-            background-color: #2563eb; 
-            outline: none;
-        }
-
-        .utility-button {
-             background-color: #e5e7eb;
-             color: #374151;
-             font-weight: 500;
-             border: 1px solid #d1d5db;
-             transition: background-color 0.2s;
-        }
-        .utility-button:hover {
-            background-color: #d1d5db;
-        }
-
-        .ios-label {
-            color: #4b5563;
-            font-weight: 500;
-            margin-bottom: 6px;
-            display: block;
-            font-size: 14px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .spinner {
-            animation: spin 1s linear infinite;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #f0f2f5; }
+        .ios-select, .ios-button { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-color: #ffffff; border: 1px solid #d1d5db; border-radius: 10px; padding: 14px 16px; font-size: 16px; width: 100%; cursor: pointer; color: #111827; }
+        .ios-select { background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m5%206%205%208%205-8%22%20stroke%3D%22%236b7280%22%20stroke-width%3D%222%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
+        .ios-button { background-color: #3b82f6; color: white; font-weight: 600; border: none; transition: background-color 0.2s ease-in-out; }
+        .ios-button:hover, .ios-button:focus { background-color: #2563eb; outline: none; }
+        .utility-button { background-color: #e5e7eb; color: #374151; font-weight: 500; border: 1px solid #d1d5db; transition: background-color 0.2s; }
+        .utility-button:hover { background-color: #d1d5db; }
+        .ios-label { color: #4b5563; font-weight: 500; margin-bottom: 6px; display: block; font-size: 14px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner { animation: spin 1s linear infinite; }
     </style>
+    <meta name="google-site-verification" content="qcOFByDf3ybTrCSraFeUdqw3PcoSRuX6nw5DHvyu6fk" />
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
-
     <main id="app" class="w-full max-w-md mx-auto bg-white rounded-2xl shadow-lg p-6 md:p-8 space-y-6">
         <div id="loader" class="text-center py-8">
             <div class="spinner h-12 w-12 rounded-full border-4 border-t-blue-500 border-gray-200 mx-auto"></div>
@@ -109,14 +56,11 @@
                 </div>
                 <button id="show-price-btn" class="ios-button w-full !mt-6 py-3">顯示價格</button>
             </section>
-
-            <!-- Results Display Area -->
             <section id="results-container" class="mt-6">
                  <h2 id="results-title" class="font-semibold text-lg text-gray-700 mb-2">價格詳情</h2>
                  <div id="results" class="p-4 bg-blue-50 border border-blue-200 rounded-lg min-h-[120px] text-gray-800 whitespace-pre-wrap text-sm leading-relaxed">
                     請選擇商品以查看價格。
                  </div>
-                <p>All the data is form Hong Kong Consumer Council</p>
             </section>
         </div>
         <div id="error-message" class="hidden text-center text-red-600 bg-red-100 p-4 rounded-lg"></div>
@@ -127,7 +71,6 @@
             const loader = document.getElementById('loader');
             const mainContent = document.getElementById('main-content');
             const errorMessage = document.getElementById('error-message');
-            
             const spinner1 = document.getElementById('spinner1');
             const spinner2 = document.getElementById('spinner2');
             const spinner3 = document.getElementById('spinner3');
@@ -136,8 +79,10 @@
             const resultsDiv = document.getElementById('results');
             const langToggleBtn = document.getElementById('lang-toggle-btn');
             const updateDataBtn = document.getElementById('update-data-btn');
-            let f1 = []; let f2 = {}; let f3 = {}; let f4 = {}; let f5 = {};
+
+            let dataStore = {};
             let currentLanguage = 'zh';
+
             const supermarketNames = {
                 'AEON': { zh: '永旺', en: 'AEON' },
                 'PNS': { zh: '百佳', en: 'PARKnSHOP' },
@@ -145,68 +90,17 @@
             };
 
             const translations = {
-                zh: {
-                    title: '香港超市價格比較',
-                    subtitle: 'HK Supermarket Price Watch',
-                    toggleLang: 'English',
-                    updateData: '更新數據',
-                    loading: '正在載入數據...',
-                    updating: '正在更新數據...',
-                    cat1: '貨品分類 1',
-                    cat2: '貨品分類 2',
-                    cat3: '貨品分類 3',
-                    product: '貨品名稱',
-                    showPrice: '顯示價格',
-                    resultsTitle: '價格詳情',
-                    initialResult: '請選擇商品以查看價格。',
-                    selectCat1: '選擇分類 1',
-                    selectCat2: '選擇分類 2',
-                    selectCat3: '選擇分類 3',
-                    selectProduct: '選擇貨品',
-                    noPriceInfo: '暫無此商品的價格信息。',
-                    selectProductFirst: '請先從上方列表選擇一個完整的商品名稱。',
-                    dataError: '無法載入數據。請稍後再試。',
-                    productLabel: '商品',
-                    brandLabel: '品牌',
-                    priceLabel: '價格',
-                    offerLabel: '優惠',
-                    noOffer: '無',
-                    supermarketLabel: '超市'
-                },
-                en: {
-                    title: 'HK Supermarket Price Comparison',
-                    subtitle: '香港超市價格比較',
-                    toggleLang: '中文',
-                    updateData: 'Update Data',
-                    loading: 'Loading data...',
-                    updating: 'Updating data...',
-                    cat1: 'Category 1',
-                    cat2: 'Category 2',
-                    cat3: 'Category 3',
-                    product: 'Product Name',
-                    showPrice: 'Show Price',
-                    resultsTitle: 'Price Details',
-                    initialResult: 'Please select a product to see prices.',
-                    selectCat1: 'Select Category 1',
-                    selectCat2: 'Select Category 2',
-                    selectCat3: 'Select Category 3',
-                    selectProduct: 'Select Product',
-                    noPriceInfo: 'No price information available for this product.',
-                    selectProductFirst: 'Please select a complete product name from the list above.',
-                    dataError: 'Could not load data. Please try again later.',
-                    productLabel: 'Product',
-                    brandLabel: 'Brand',
-                    priceLabel: 'Price',
-                    offerLabel: 'Offer',
-                    noOffer: 'None',
-                    supermarketLabel: 'Supermarket'
-                }
+                zh: { title: '香港超市價格比較', subtitle: 'HK Supermarket Price Watch', toggleLang: 'English', updateData: '更新數據', loading: '正在載入數據...', updating: '正在更新數據...', cat1: '貨品分類 1', cat2: '貨品分類 2', cat3: '貨品分類 3', product: '貨品名稱', showPrice: '顯示價格', resultsTitle: '價格詳情', initialResult: '請選擇商品以查看價格。', selectCat1: '選擇分類 1', selectCat2: '選擇分類 2', selectCat3: '選擇分類 3', selectProduct: '選擇貨品', noPriceInfo: '暫無此商品的價格信息。', selectProductFirst: '請先從上方列表選擇一個完整的商品名稱。', dataError: '無法載入數據。請稍後再試。', productLabel: '商品', brandLabel: '品牌', priceLabel: '價格', offerLabel: '優惠', noOffer: '無', supermarketLabel: '超市' },
+                en: { title: 'HK Supermarket Price Comparison', subtitle: '香港超市價格比較', toggleLang: '中文', updateData: 'Update Data', loading: 'Loading data...', updating: 'Updating data...', cat1: 'Category 1', cat2: 'Category 2', cat3: 'Category 3', product: 'Product Name', showPrice: 'Show Price', resultsTitle: 'Price Details', initialResult: 'Please select a product to see prices.', selectCat1: 'Select Category 1', selectCat2: 'Select Category 2', selectCat3: 'Select Category 3', selectProduct: 'Select Product', noPriceInfo: 'No price information available for this product.', selectProductFirst: 'Please select a complete product name from the list above.', dataError: 'Could not load data. Please try again later.', productLabel: 'Product', brandLabel: 'Brand', priceLabel: 'Price', offerLabel: 'Offer', noOffer: 'None', supermarketLabel: 'Supermarket' }
             };
+            
             function setLanguage(lang) {
                 currentLanguage = lang;
                 document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
                 const t = translations[lang];
+
                 document.title = t.title;
+                
                 document.getElementById('app-title').textContent = t.title;
                 document.getElementById('app-subtitle').textContent = t.subtitle;
                 document.getElementById('lang-toggle-btn').textContent = t.toggleLang;
@@ -217,16 +111,19 @@
                 document.getElementById('label-product').textContent = t.product;
                 document.getElementById('show-price-btn').textContent = t.showPrice;
                 document.getElementById('results-title').textContent = t.resultsTitle;
-                populateSpinner(spinner1, f1, t.selectCat1);
+
+                populateSpinner(spinner1, Array.from(dataStore.cat1).sort(), t.selectCat1);
                 resetSpinner(spinner2, t.selectCat2);
                 resetSpinner(spinner3, t.selectCat3);
                 resetSpinner(spinner4, t.selectProduct);
+                
                 if(resultsDiv.textContent === translations.zh.initialResult || resultsDiv.textContent === translations.en.initialResult) {
                     resultsDiv.textContent = t.initialResult;
                 } else {
                     showPrice();
                 }
             }
+
             async function loadData(isUpdate = false) {
                 const t = translations[currentLanguage];
                 loader.classList.remove('hidden');
@@ -234,16 +131,14 @@
                 document.getElementById('loader-text').textContent = isUpdate ? t.updating : t.loading;
 
                 const dataUrl = "https://online-price-watch.consumer.org.hk/opw/opendata/pricewatch_zh-Hant.csv";
-                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(dataUrl)}`;
+                const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(dataUrl)}`;
 
                 try {
                     const response = await fetch(proxyUrl);
                     if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
                     
                     const csvText = await response.text();
-                    const parsedData = parseCSV(csvText);
-                    processData(parsedData);
-                    
+                    processData(parseCSV(csvText));
                     setLanguage(currentLanguage);
 
                     loader.classList.add('hidden');
@@ -266,32 +161,37 @@
                     const values = lines[i].split(',');
                     if (values.length !== headers.length) continue;
                     const entry = {};
-                    for (let j = 0; j < headers.length; j++) {
-                        entry[headers[j]] = values[j].trim();
-                    }
+                    headers.forEach((header, j) => entry[header] = values[j].trim());
                     data.push(entry);
                 }
                 return data;
             }
             
             function processData(data) {
-                f1 = []; f2 = {}; f3 = {}; f4 = {}; f5 = {};
+                dataStore = { cat1: new Set(), cat2: {}, cat3: {}, products: {}, productDetails: {} };
                 data.forEach(item => {
-                    const cat1 = item['貨品分類1'], cat2 = item['貨品分類2'], cat3 = item['貨品分類3'], name = item['貨品名稱'];
-                    const supermarket = item['超市代號'], price = item['價格'], offer = item['優惠'], brand = item['品牌'];
+                    const c1 = item['貨品分類1'], c2 = item['貨品分類2'], c3 = item['貨品分類3'], name = item['貨品名稱'];
+                    if (!c1 || !c2 || !c3 || !name) return;
 
-                    if (!cat1 || !cat2 || !cat3 || !name) return;
+                    const keyC2 = `${c1}`;
+                    const keyC3 = `${c1}|${c2}`;
+                    const keyProd = `${c1}|${c2}|${c3}`;
 
-                    if (!f1.includes(cat1)) { f1.push(cat1); f2[cat1] = []; }
-                    if (!f2[cat1].includes(cat2)) { f2[cat1].push(cat2); f3[cat2] = []; }
-                    if (!f3[cat2].includes(cat3)) { f3[cat2].push(cat3); f4[cat3] = []; }
-                    if (!f4[cat3].includes(name)) { f4[cat3].push(name); f5[`${name}_price`] = {}; f5[`${name}_brand`] = brand; }
+                    dataStore.cat1.add(c1);
                     
-                    const t = translations[currentLanguage];
-                    const priceText = `${t.priceLabel}: $${price}, ${t.offerLabel}: ${offer || t.noOffer}`;
-                    if (!f5[`${name}_price`][supermarket]) {
-                        f5[`${name}_price`][supermarket] = priceText;
+                    if (!dataStore.cat2[keyC2]) dataStore.cat2[keyC2] = new Set();
+                    dataStore.cat2[keyC2].add(c2);
+
+                    if (!dataStore.cat3[keyC3]) dataStore.cat3[keyC3] = new Set();
+                    dataStore.cat3[keyC3].add(c3);
+
+                    if (!dataStore.products[keyProd]) dataStore.products[keyProd] = new Set();
+                    dataStore.products[keyProd].add(name);
+
+                    if (!dataStore.productDetails[name]) {
+                        dataStore.productDetails[name] = { brand: item['品牌'], prices: {} };
                     }
+                    dataStore.productDetails[name].prices[item['超市代號']] = { price: item['價格'], offer: item['優惠'] };
                 });
             }
 
@@ -310,76 +210,71 @@
                 spinner.innerHTML = `<option value="">-- ${defaultText} --</option>`;
                 spinner.disabled = true;
             }
-
-            function updateSpinner2() {
-                const selectedCat1 = spinner1.value;
-                const t = translations[currentLanguage];
-                if (selectedCat1 && f2[selectedCat1]) {
-                    populateSpinner(spinner2, f2[selectedCat1], t.selectCat2);
-                } else {
-                    resetSpinner(spinner2, t.selectCat2);
-                }
-                resetSpinner(spinner3, t.selectCat3);
-                resetSpinner(spinner4, t.selectProduct);
-                resultsDiv.textContent = t.initialResult;
-            }
-
-            function updateSpinner3() {
-                const selectedCat2 = spinner2.value;
-                const t = translations[currentLanguage];
-                if (selectedCat2 && f3[selectedCat2]) {
-                    populateSpinner(spinner3, f3[selectedCat2], t.selectCat3);
-                } else {
-                    resetSpinner(spinner3, t.selectCat3);
-                }
-                resetSpinner(spinner4, t.selectProduct);
-                resultsDiv.textContent = t.initialResult;
-            }
             
-            function updateSpinner4() {
-                const selectedCat3 = spinner3.value;
-                const t = translations[currentLanguage];
-                if (selectedCat3 && f4[selectedCat3]) {
-                    populateSpinner(spinner4, f4[selectedCat3], t.selectProduct);
-                } else {
-                    resetSpinner(spinner4, t.selectProduct);
-                }
-                 resultsDiv.textContent = t.initialResult;
-            }
-
             function showPrice() {
                 const selectedProduct = spinner4.value;
                 const t = translations[currentLanguage];
-                if (selectedProduct) {
-                    const priceInfo = f5[`${selectedProduct}_price`] || {};
-                    const brand = f5[`${selectedProduct}_brand`] || "未知品牌";
-                    
-                    let output = `${t.productLabel}: ${selectedProduct}\n`;
-                    output += `${t.brandLabel}: ${brand}\n\n`;
-                    
-                    const supermarkets = Object.keys(priceInfo);
-                    if (supermarkets.length > 0) {
-                       supermarkets.forEach(code => {
-                           const storeName = (supermarketNames[code] && supermarketNames[code][currentLanguage]) || code;
-                           const priceText = `${t.priceLabel}: $${f5[`${selectedProduct}_price`][code].split('$')[1].split(',')[0]}, ${t.offerLabel}: ${f5[`${selectedProduct}_price`][code].split(': ')[2] || t.noOffer}`;
-                           output += `${t.supermarketLabel} ${storeName}: ${priceText}\n`;
-                       });
-                    } else {
-                        output += t.noPriceInfo;
-                    }
-                    resultsDiv.textContent = output;
-                } else {
+                if (!selectedProduct) {
                     resultsDiv.textContent = t.selectProductFirst;
+                    return;
                 }
+
+                const details = dataStore.productDetails[selectedProduct];
+                if (!details) {
+                    resultsDiv.textContent = t.noPriceInfo;
+                    return;
+                }
+
+                let output = `${t.productLabel}: ${selectedProduct}\n`;
+                output += `${t.brandLabel}: ${details.brand || 'N/A'}\n\n`;
+                
+                const supermarkets = Object.keys(details.prices);
+                if (supermarkets.length > 0) {
+                    supermarkets.forEach(code => {
+                        const storeName = (supermarketNames[code] && supermarketNames[code][currentLanguage]) || code;
+                        const priceInfo = details.prices[code];
+                        output += `${t.supermarketLabel} ${storeName}: ${t.priceLabel} $${priceInfo.price}, ${t.offerLabel}: ${priceInfo.offer || t.noOffer}\n`;
+                    });
+                } else {
+                    output += t.noPriceInfo;
+                }
+                resultsDiv.textContent = output;
             }
 
-            spinner1.addEventListener('change', updateSpinner2);
-            spinner2.addEventListener('change', updateSpinner3);
-            spinner3.addEventListener('change', updateSpinner4);
-            showPriceBtn.addEventListener('click', showPrice);
-            langToggleBtn.addEventListener('click', () => {
-                setLanguage(currentLanguage === 'en' ? 'zh' : 'en');
+            spinner1.addEventListener('change', () => {
+                const t = translations[currentLanguage];
+                const c1 = spinner1.value;
+                const values = c1 && dataStore.cat2[c1] ? Array.from(dataStore.cat2[c1]).sort() : [];
+                populateSpinner(spinner2, values, t.selectCat2);
+                resetSpinner(spinner3, t.selectCat3);
+                resetSpinner(spinner4, t.selectProduct);
+                resultsDiv.textContent = t.initialResult;
             });
+
+            spinner2.addEventListener('change', () => {
+                const t = translations[currentLanguage];
+                const c1 = spinner1.value;
+                const c2 = spinner2.value;
+                const key = `${c1}|${c2}`;
+                const values = c1 && c2 && dataStore.cat3[key] ? Array.from(dataStore.cat3[key]).sort() : [];
+                populateSpinner(spinner3, values, t.selectCat3);
+                resetSpinner(spinner4, t.selectProduct);
+                resultsDiv.textContent = t.initialResult;
+            });
+
+            spinner3.addEventListener('change', () => {
+                const t = translations[currentLanguage];
+                const c1 = spinner1.value;
+                const c2 = spinner2.value;
+                const c3 = spinner3.value;
+                const key = `${c1}|${c2}|${c3}`;
+                const values = c1 && c2 && c3 && dataStore.products[key] ? Array.from(dataStore.products[key]).sort() : [];
+                populateSpinner(spinner4, values, t.selectProduct);
+                resultsDiv.textContent = t.initialResult;
+            });
+            
+            showPriceBtn.addEventListener('click', showPrice);
+            langToggleBtn.addEventListener('click', () => setLanguage(currentLanguage === 'en' ? 'zh' : 'en'));
             updateDataBtn.addEventListener('click', () => loadData(true));
 
             loadData();
