@@ -181,7 +181,7 @@
                 document.getElementById('show-price-btn').textContent = t.showPrice;
                 document.getElementById('results-title').textContent = t.resultsTitle;
 
-                populateSpinner(spinner1, Object.keys(dataStore).sort(), t.selectCat1);
+                populateSpinner(spinner1, Object.keys(dataStore.categories || {}).sort(), t.selectCat1);
                 resetSpinner(spinner2, t.selectCat2);
                 resetSpinner(spinner3, t.selectCat3);
                 resetSpinner(spinner4, t.selectProduct);
@@ -248,17 +248,16 @@
             }
             
             function processData(data) {
-                dataStore = {};
+                dataStore = { categories: {}, productDetails: {} };
                 data.forEach(item => {
                     const c1 = item['貨品分類1'], c2 = item['貨品分類2'], c3 = item['貨品分類3'], name = item['貨品名稱'];
                     if (!c1 || !c2 || !c3 || !name) return;
 
-                    if (!dataStore[c1]) dataStore[c1] = {};
-                    if (!dataStore[c1][c2]) dataStore[c1][c2] = {};
-                    if (!dataStore[c1][c2][c3]) dataStore[c1][c2][c3] = new Set();
-                    dataStore[c1][c2][c3].add(name);
+                    if (!dataStore.categories[c1]) dataStore.categories[c1] = {};
+                    if (!dataStore.categories[c1][c2]) dataStore.categories[c1][c2] = {};
+                    if (!dataStore.categories[c1][c2][c3]) dataStore.categories[c1][c2][c3] = new Set();
+                    dataStore.categories[c1][c2][c3].add(name);
 
-                    if (!dataStore.productDetails) dataStore.productDetails = {};
                     if (!dataStore.productDetails[name]) {
                         dataStore.productDetails[name] = { brand: item['品牌'], prices: {} };
                     }
@@ -315,7 +314,7 @@
             spinner1.addEventListener('change', () => {
                 const t = translations[currentLanguage];
                 const c1 = spinner1.value;
-                const values = c1 ? Object.keys(dataStore[c1]).sort() : [];
+                const values = c1 ? Object.keys(dataStore.categories[c1]).sort() : [];
                 populateSpinner(spinner2, values, t.selectCat2);
                 resetSpinner(spinner3, t.selectCat3);
                 resetSpinner(spinner4, t.selectProduct);
@@ -326,7 +325,7 @@
                 const t = translations[currentLanguage];
                 const c1 = spinner1.value;
                 const c2 = spinner2.value;
-                const values = c1 && c2 ? Object.keys(dataStore[c1][c2]).sort() : [];
+                const values = c1 && c2 ? Object.keys(dataStore.categories[c1][c2]).sort() : [];
                 populateSpinner(spinner3, values, t.selectCat3);
                 resetSpinner(spinner4, t.selectProduct);
                 resultsDiv.textContent = t.initialResult;
@@ -337,7 +336,7 @@
                 const c1 = spinner1.value;
                 const c2 = spinner2.value;
                 const c3 = spinner3.value;
-                const values = c1 && c2 && c3 ? Array.from(dataStore[c1][c2][c3]).sort() : [];
+                const values = c1 && c2 && c3 ? Array.from(dataStore.categories[c1][c2][c3]).sort() : [];
                 populateSpinner(spinner4, values, t.selectProduct);
                 resultsDiv.textContent = t.initialResult;
             });
