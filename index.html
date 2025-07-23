@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>香港超市價格比較</title>
+    <title>ComPriceHK</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,6 @@
             padding: 1rem;
         }
 
-        /* --- Glassmorphism Card --- */
         #app {
             background: rgba(255, 255, 255, 0.6);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -28,8 +27,6 @@
             border: 1px solid rgba(209, 213, 219, 0.3);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
         }
-
-        /* --- Glassmorphism Inputs & Buttons --- */
         .glass-input, .glass-button {
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -57,8 +54,6 @@
             background-position: right 1rem center;
             background-size: 1em;
         }
-        
-        /* --- Primary Action Button --- */
         .primary-button {
             background-color: #3b82f6;
             color: white;
@@ -78,8 +73,6 @@
             font-size: 14px;
             padding-left: 4px;
         }
-        
-        /* --- Results Area --- */
         #results {
             background: rgba(59, 130, 246, 0.1);
             -webkit-backdrop-filter: blur(5px);
@@ -158,8 +151,11 @@
 
             const supermarketNames = {
                 'AEON': { zh: '永旺', en: 'AEON' },
-                'PNS': { zh: '百佳', en: 'PARKnSHOP' },
-                'WTM': { zh: '惠康', en: 'Wellcome' },
+                'PARKNSHOP': { zh: '百佳', en: 'PARKNSHOP' },
+                'WELLCOME': { zh: '惠康', en: 'Wellcome' },
+                'JASONS': { zh: 'Market Place', en: 'Market Place' },
+                'MANNINGS': { zh: '萬寧', en: 'MANNINGS' },
+                'WATSONS': { zh: '屈臣氏', en: 'WATSONS' },
             };
 
             const translations = {
