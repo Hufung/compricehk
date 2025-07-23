@@ -197,7 +197,7 @@
                 }
             }
             
-            async function fetchWithRetry(url, retries = 3, delay = 1000) {
+            async function fetchWithRetry(url) {
                 for (let i = 0; i < retries; i++) {
                     try {
                         const response = await fetch(url);
