@@ -48,7 +48,7 @@
             background: rgba(255, 255, 255, 0.7);
         }
         
-        .glass-input {
+        select.glass-input {
             background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22m5%206%205%208%205-8%22%20stroke%3D%22%23374151%22%20stroke-width%3D%222%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E');
             background-repeat: no-repeat;
             background-position: right 1rem center;
@@ -105,6 +105,17 @@
             </section>
             <section class="space-y-5">
                 <div>
+                    <label for="search-box" id="label-search" class="ios-label">搜尋貨品</label>
+                    <input type="text" id="search-box" class="glass-input" placeholder="輸入關鍵字...">
+                </div>
+
+                <div class="relative flex items-center">
+                    <div class="flex-grow border-t border-gray-300"></div>
+                    <span id="or-divider" class="flex-shrink mx-4 text-gray-500 text-sm">或</span>
+                    <div class="flex-grow border-t border-gray-300"></div>
+                </div>
+
+                <div>
                     <label for="spinner1" id="label-cat1" class="ios-label">貨品分類 1</label>
                     <select id="spinner1" class="glass-input"></select>
                 </div>
@@ -137,6 +148,7 @@
             const loader = document.getElementById('loader');
             const mainContent = document.getElementById('main-content');
             const errorMessage = document.getElementById('error-message');
+            const searchBox = document.getElementById('search-box');
             const spinner1 = document.getElementById('spinner1');
             const spinner2 = document.getElementById('spinner2');
             const spinner3 = document.getElementById('spinner3');
@@ -159,8 +171,8 @@
             };
 
             const translations = {
-                zh: { title: '香港超市價格比較', subtitle: 'HK Supermarket Price Comparison', toggleLang: 'English', updateData: '更新數據', loading: '正在載入數據...(It may need more time for first loading)', updating: '正在更新數據...', cat1: '貨品分類 1', cat2: '貨品分類 2', cat3: '貨品分類 3', product: '貨品名稱', showPrice: '顯示價格', resultsTitle: '價格詳情', initialResult: '請選擇商品以查看價格。', selectCat1: '選擇分類 1', selectCat2: '選擇分類 2', selectCat3: '選擇分類 3', selectProduct: '選擇貨品', noPriceInfo: '暫無此商品的價格信息。', selectProductFirst: '請先從上方列表選擇一個完整的商品名稱。', dataError: '無法載入數據。請稍後再試。', productLabel: '商品', brandLabel: '品牌', priceLabel: '價格', offerLabel: '優惠', noOffer: '無', supermarketLabel: '超市' },
-                en: { title: 'HK Supermarket Price Comparison', subtitle: '香港超市價格比較', toggleLang: '中文', updateData: 'Update Data', loading: 'Loading data...(It may need more time for first loading)', updating: 'Updating data...', cat1: 'Category 1', cat2: 'Category 2', cat3: 'Category 3', product: 'Product Name', showPrice: 'Show Price', resultsTitle: 'Price Details', initialResult: 'Please select a product to see prices.', selectCat1: 'Select Category 1', selectCat2: 'Select Category 2', selectCat3: 'Select Category 3', selectProduct: 'Select Product', noPriceInfo: 'No price information available for this product.', selectProductFirst: 'Please select a complete product name from the list above.', dataError: 'Could not load data. Please try again later.', productLabel: 'Product', brandLabel: 'Brand', priceLabel: 'Price', offerLabel: 'Offer', noOffer: 'None', supermarketLabel: 'Supermarket' }
+                zh: { title: '香港超市價格比較', subtitle: 'HK Supermarket Price Comparison', toggleLang: 'English', updateData: '更新數據', loading: '正在載入數據...(It may need more time for first loading)', updating: '正在更新數據...', searchLabel: '直接搜尋貨品', searchPlaceholder: '輸入產品關鍵字...', orDivider: '或 按分類選擇', cat1: '貨品分類 1', cat2: '貨品分類 2', cat3: '貨品分類 3', product: '貨品名稱', showPrice: '顯示價格', resultsTitle: '價格詳情', initialResult: '請選擇商品以查看價格。', selectCat1: '選擇分類 1', selectCat2: '選擇分類 2', selectCat3: '選擇分類 3', selectProduct: '選擇貨品', noPriceInfo: '暫無此商品的價格信息。', selectProductFirst: '請先從上方列表選擇一個完整的商品名稱。', dataError: '無法載入數據。請稍後再試。', productLabel: '商品', brandLabel: '品牌', priceLabel: '價格', offerLabel: '優惠', noOffer: '無', supermarketLabel: '超市' },
+                en: { title: 'HK Supermarket Price Comparison', subtitle: '香港超市價格比較', toggleLang: '中文', updateData: 'Update Data', loading: 'Loading data...(It may need more time for first loading)', updating: 'Updating data...', searchLabel: 'Direct Product Search', searchPlaceholder: 'Enter product keyword...', orDivider: 'OR Select by Category', cat1: 'Category 1', cat2: 'Category 2', cat3: 'Category 3', product: 'Product Name', showPrice: 'Show Price', resultsTitle: 'Price Details', initialResult: 'Please select a product to see prices.', selectCat1: 'Select Category 1', selectCat2: 'Select Category 2', selectCat3: 'Select Category 3', selectProduct: 'Select Product', noPriceInfo: 'No price information available for this product.', selectProductFirst: 'Please select a complete product name from the list above.', dataError: 'Could not load data. Please try again later.', productLabel: 'Product', brandLabel: 'Brand', priceLabel: 'Price', offerLabel: 'Offer', noOffer: 'None', supermarketLabel: 'Supermarket' }
             };
             
             function setLanguage(lang) {
@@ -174,6 +186,9 @@
                 document.getElementById('app-subtitle').textContent = t.subtitle;
                 document.getElementById('lang-toggle-btn').textContent = t.toggleLang;
                 document.getElementById('update-data-btn').textContent = t.updateData;
+                document.getElementById('label-search').textContent = t.searchLabel;
+                searchBox.placeholder = t.searchPlaceholder;
+                document.getElementById('or-divider').textContent = t.orDivider;
                 document.getElementById('label-cat1').textContent = t.cat1;
                 document.getElementById('label-cat2').textContent = t.cat2;
                 document.getElementById('label-cat3').textContent = t.cat3;
@@ -188,7 +203,7 @@
                 
                 if(resultsDiv.textContent === translations.zh.initialResult || resultsDiv.textContent === translations.en.initialResult) {
                     resultsDiv.textContent = t.initialResult;
-                } else {
+                } else if (spinner4.value) {
                     showPrice();
                 }
             }
@@ -266,6 +281,7 @@
             }
 
             function populateSpinner(spinner, values, defaultText) {
+                const currentValue = spinner.value;
                 spinner.innerHTML = `<option value="">-- ${defaultText} --</option>`;
                 values.forEach(value => {
                     const option = document.createElement('option');
@@ -274,6 +290,10 @@
                     spinner.appendChild(option);
                 });
                 spinner.disabled = values.length === 0;
+
+                if (values.includes(currentValue)) {
+                    spinner.value = currentValue;
+                }
             }
 
             function resetSpinner(spinner, defaultText) {
@@ -311,8 +331,33 @@
                 resultsDiv.textContent = output;
             }
 
+            function performSearch() {
+                const searchTerm = searchBox.value.trim();
+                const t = translations[currentLanguage];
+                if (!searchTerm) {
+                    resetSpinner(spinner4, t.selectProduct);
+                    return;
+                }
+
+                const allProductNames = Object.keys(dataStore.productDetails);
+                const searchResults = allProductNames
+                    .filter(name => name.toLowerCase().includes(searchTerm.toLowerCase()))
+                    .sort();
+                
+                populateSpinner(spinner4, searchResults, t.selectProduct);
+                
+                // Reset category selections
+                spinner1.value = "";
+                resetSpinner(spinner2, t.selectCat2);
+                resetSpinner(spinner3, t.selectCat3);
+                resultsDiv.textContent = t.initialResult;
+            }
+
+            searchBox.addEventListener('input', performSearch);
+
             spinner1.addEventListener('change', () => {
                 const t = translations[currentLanguage];
+                searchBox.value = ''; // Clear search box
                 const c1 = spinner1.value;
                 const values = c1 ? Object.keys(dataStore.categories[c1]).sort() : [];
                 populateSpinner(spinner2, values, t.selectCat2);
